@@ -20,6 +20,7 @@ export class PieChartComponent implements AfterViewInit {
     private radius: number;
     private htmlElement: HTMLElement;
     private pieData: IData[];
+    private color = D3.scale.category20c();
 
     constructor(private dataService: DataService) { }
 
@@ -70,7 +71,16 @@ export class PieChartComponent implements AfterViewInit {
             .attr("d", arc)
             .attr("fill", (datum, index) => {
                 return pieColor(this.pieData[index].label);
-            });
+            }).on("mouseover", function() {
+              D3.select(this)
+                .attr("opacity", .5);
+               // D3.select(this).attr("transform", () => { return `translateX(px)`; });
+          })
+          .on("mouseout", function(d, i) {
+              D3.select(this).attr("opacity", () => {
+                  return 1 ;
+              });
+          });
 
         arcSelection.append("text")
             .attr("transform", (datum: any) => {
